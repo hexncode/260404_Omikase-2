@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>御招待 — Home Omakase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=IM+Fell+English:ital@0;1&family=Noto+Serif+JP:wght@200;300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
+}
+
+:root {
+  --washi: #f5f0e8;
+  --ivory: #faf7f1;
+  --sumi: #1a1612;
+  --sumi-light: #3d3530;
+  --sumi-faint: #6b5d54;
+  --urushi: #8b1a1a;
+  --urushi-dark: #5c0f0f;
+  --gold: #c4975a;
+  --gold-pale: #dbb87a;
+  --gold-faint: #e8d5a8;
+  --indigo: #2d3b5a;
+  --pine: #2d4a3e;
+  --matcha: #5a7a5a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
+  background: var(--washi);
+  color: var(--sumi);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Washi Paper Texture ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── Falling Leaves ── */
+.leaf {
+  position: fixed;
+  width: 6px;
+  height: 10px;
+  border-radius: 50% 50% 50% 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  animation: leafFall linear forwards;
+}
+
+@keyframes leafFall {
+  0%   { opacity: 0; transform: translateX(0) translateY(0) rotate(0deg); }
+  8%   { opacity: 0.5; }
+  90%  { opacity: 0.3; }
+  100% { opacity: 0; transform: translateX(var(--leaf-drift)) translateY(100vh) rotate(var(--leaf-spin)); }
+}
+
+/* ── Vertical Japanese Lines ── */
+.mon-mark {
+  position: absolute;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  writing-mode: vertical-rl;
+  font-size: 0.7rem;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  opacity: 0.5;
+}
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  position: relative;
+  overflow: hidden;
+  background: var(--ivory);
+}
+
+/* Sumi-e brush stroke background */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 80%, rgba(139,26,26,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 10%, rgba(196,151,90,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(245,240,232,0) 0%, var(--ivory) 100%);
+  pointer-events: none;
+}
+
+/* Decorative ink lines */
+.hero-line-left {
+  position: absolute;
+  left: 4rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  opacity: 0.2;
+}
+.hero-line-right {
+  position: absolute;
+  right: 4rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--sumi-light) 20%, var(--sumi-light) 80%, transparent);
+  opacity: 0.1;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+/* Large kanji watermark */
+.hero-kanji-bg {
+  position: absolute;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 800;
+  font-size: clamp(14rem, 35vw, 28rem);
+  color: var(--sumi);
+  opacity: 0.025;
+  line-height: 1;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+  letter-spacing: 0.6em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+.hero-crest {
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 2rem;
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+}
+
+.hero-title-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  color: var(--sumi);
+  letter-spacing: 0.4em;
+  line-height: 1.3;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+}
+
+.hero-title-en {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--sumi-faint);
+  letter-spacing: 0.25em;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+}
+
+.hero-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards;
+}
+
+.hero-rule .r-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.hero-rule .r-line:last-child {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.hero-rule .r-mark {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+
+.hero-details {
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.1s forwards;
+}
+
+.hero-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 300;
+  color: var(--sumi);
+  letter-spacing: 0.3em;
+  margin-bottom: 0.5rem;
+}
+
+.hero-host {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.8rem;
+  letter-spacing: 0.5em;
+  color: var(--sumi-faint);
+  margin-top: 0.5rem;
+}
+
+.scroll-invite {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.5s forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.scroll-invite span {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Invitation Section ── */
+.invitation {
+  background: var(--sumi);
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.invitation::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.invitation::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.inv-kanji-bg {
+  position: absolute;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 800;
+  font-size: clamp(10rem, 25vw, 20rem);
+  color: #fff;
+  opacity: 0.02;
+  line-height: 1;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.inv-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.inv-jp-label {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.75rem;
+  letter-spacing: 0.7em;
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+
+.inv-title {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  color: var(--ivory);
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+.inv-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 300;
+  line-height: 2;
+  color: rgba(245,240,232,0.65);
+  letter-spacing: 0.05em;
+  margin-bottom: 3rem;
+}
+
+.rsvp-btn {
+  display: inline-block;
+  padding: 0.9rem 3rem;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  font-size: 0.8rem;
+  letter-spacing: 0.5em;
+  color: var(--sumi);
+  background: var(--gold);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.rsvp-btn:hover {
+  background: var(--gold-pale);
+  letter-spacing: 0.6em;
+}
+
+.inv-address {
+  margin-bottom: 2.5rem;
+}
+.inv-address-label {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.65rem;
+  letter-spacing: 0.7em;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.inv-address-text {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: rgba(245,240,232,0.6);
+  letter-spacing: 0.15em;
+}
+
+.rsvp-response {
+  display: none;
+  margin-top: 2rem;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--gold-pale);
+  animation: softGlow 2s ease infinite;
+}
+@keyframes softGlow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* ── Menu ── */
+.menu-section {
+  background: var(--ivory);
+  padding: 0 2rem 6rem;
+  position: relative;
+}
+
+.menu-topper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0 4rem;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.menu-topper-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  letter-spacing: 0.6em;
+  color: var(--sumi);
+}
+
+.menu-topper-en {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--sumi-faint);
+  letter-spacing: 0.3em;
+}
+
+.menu-topper-rule {
+  width: 1px;
+  height: 40px;
+  background: var(--gold);
+  opacity: 0.5;
+  margin: 0.5rem 0;
+}
+
+/* The actual menu card */
+.menu-card {
+  max-width: 620px;
+  margin: 0 auto;
+  background: var(--washi);
+  border: 1px solid rgba(196,151,90,0.2);
+  position: relative;
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(2rem, 5vw, 4.5rem);
+}
+
+/* Corner ornaments */
+.menu-card::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 12px; right: 12px; bottom: 12px;
+  border: 1px solid rgba(196,151,90,0.12);
+  pointer-events: none;
+}
+
+.corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--gold);
+  border-style: solid;
+  opacity: 0.4;
+}
+.corner-tl { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+.corner-tr { top: 6px; right: 6px; border-width: 1px 1px 0 0; }
+.corner-bl { bottom: 6px; left: 6px; border-width: 0 0 1px 1px; }
+.corner-br { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+.menu-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.menu-header-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--sumi);
+  letter-spacing: 0.5em;
+  line-height: 1.4;
+}
+
+.menu-header-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0 1rem;
+}
+.menu-header-divider .mhd-line {
+  width: 50px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.4;
+}
+.menu-header-divider .mhd-diamond {
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+
+.menu-header-en {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  color: var(--sumi-faint);
+  letter-spacing: 0.35em;
+}
+
+/* ── Course ── */
+.course {
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.course.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.course-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.3rem;
+  text-align: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(196,151,90,0.15);
+}
+
+.course-num {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.65rem;
+  letter-spacing: 0.7em;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.course-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: var(--sumi);
+  letter-spacing: 0.3em;
+  margin-bottom: 0.3rem;
+}
+
+.course-en {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: var(--sumi-light);
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.course-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-weight: 300;
+  color: var(--sumi-faint);
+  line-height: 1.8;
+  font-style: italic;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.course-mark {
+  width: 20px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.35;
+  margin: 0.8rem auto 0;
+}
+
+/* Drinks section */
+.drinks-section {
+  margin-top: 1rem;
+  border-top: 1px solid rgba(196,151,90,0.15);
+  padding-top: 2rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.drinks-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drinks-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.drinks-header-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.75rem;
+  letter-spacing: 0.7em;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.drinks-header-en {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--sumi-light);
+}
+
+.drink-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.6rem 0;
+  border-bottom: 1px dotted rgba(196,151,90,0.2);
+}
+.drink-item:last-child { border-bottom: none; }
+
+.drink-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  color: var(--sumi-light);
+}
+.drink-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.75rem;
+  color: var(--gold);
+  opacity: 0.7;
+}
+.drink-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--sumi-faint);
+  text-align: right;
+}
+
+/* ── Footer ── */
+.footer {
+  background: var(--sumi);
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+}
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.footer-inner {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.footer-mon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem;
+  opacity: 0.6;
+}
+
+.footer-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  color: var(--ivory);
+  letter-spacing: 0.5em;
+  margin-bottom: 1rem;
+}
+
+.footer-en {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: rgba(245,240,232,0.4);
+  letter-spacing: 0.25em;
+}
+
+.footer-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.3;
+  margin: 1.5rem auto;
+}
+
+.footer-note {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 200;
+  font-size: 0.65rem;
+  letter-spacing: 0.5em;
+  color: rgba(245,240,232,0.25);
+}
+
+/* ── Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Particles ── */
+.particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  font-size: 1rem;
+  opacity: 0;
+  animation: particleFall 2.5s ease forwards;
+}
+@keyframes particleFall {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(50vh) rotate(var(--p-spin)) scale(0.3); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 500px) {
+  .hero-line-left, .hero-line-right { display: none; }
+  .menu-card { padding: 2rem 1.5rem; }
+  .drink-item { flex-direction: column; gap: 0.2rem; }
+  .drink-note { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line-left"></div>
+  <div class="hero-line-right"></div>
+
+  <div class="hero-kanji-bg">曾</div>
+
+  <div class="hero-inner">
+
+    <div class="hero-eyebrow">御招待 · Goshōtai</div>
+
+    <!-- Staffy Head -->
+    <svg class="hero-crest" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Elegant triple-ring frame -->
+      <circle cx="150" cy="130" r="128" stroke="#c4975a" stroke-width="1.2" opacity="0.5"/>
+      <circle cx="150" cy="130" r="121" stroke="#c4975a" stroke-width="0.4" opacity="0.22"/>
+
+      <g stroke="#c4975a" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+        <!-- HEAD: wide flat-topped skull, cheeks flare at mid-face, chin rounds softly -->
+        <path d="
+          M96 74
+          Q100 48 150 44
+          Q200 48 204 74
+          Q226 82 240 108
+          Q252 136 244 164
+          Q232 196 206 212
+          Q182 226 150 228
+          Q118 226 94 212
+          Q68 196 56 164
+          Q48 136 60 108
+          Q74 82 96 74Z
+        " stroke-width="2.2"/>
+
+        <!-- Flat skull top hint -->
+        <path d="M106 60 Q128 46 150 44 Q172 46 194 60"
+              stroke-width="0.9" opacity="0.3"/>
+
+        <!-- EARS: small elegant rose ears, top corners, fold forward -->
+        <!-- Left ear -->
+        <path d="M96 74 Q78 50 60 62 Q46 76 54 98 Q62 114 80 108 Q94 100 96 82"
+              stroke-width="1.8"/>
+        <!-- Inner fold -->
+        <path d="M56 68 Q66 86 78 102" stroke-width="0.9" opacity="0.4"/>
+        <!-- Right ear -->
+        <path d="M204 74 Q222 50 240 62 Q254 76 246 98 Q238 114 220 108 Q206 100 204 82"
+              stroke-width="1.8"/>
+        <path d="M244 68 Q234 86 222 102" stroke-width="0.9" opacity="0.4"/>
+
+        <!-- BROW RIDGES: defining staffy feature — sweep inward elegantly -->
+        <path d="M64 112 Q98 92 128 106" stroke-width="2.6"/>
+        <path d="M172 106 Q202 92 236 112" stroke-width="2.6"/>
+        <!-- Central worried pinch -->
+        <path d="M128 102 Q140 88 150 90 Q160 88 172 102"
+              stroke-width="1.6" opacity="0.8"/>
+        <!-- Depth line, very subtle -->
+        <path d="M70 106 Q100 88 126 100" stroke-width="0.9" opacity="0.28"/>
+        <path d="M174 100 Q200 88 230 106" stroke-width="0.9" opacity="0.28"/>
+
+        <!-- EYES: almond-shaped with proper upper/lower lid curves -->
+
+        <!-- LEFT EYE -->
+        <!-- Eye shape — upper lid arches high, lower lid is flatter, meets at corners -->
+        <path d="M88 140 Q100 118 124 122 Q136 124 136 140 Q124 156 100 154 Q88 152 88 140Z"
+              fill="none" stroke-width="1.8"/>
+        <!-- Upper lid emphasis — thicker arch for that sweet look -->
+        <path d="M88 140 Q100 118 124 122 Q136 124 136 140"
+              stroke-width="2.6"/>
+        <!-- Iris — circle fitted inside eye shape -->
+        <circle cx="112" cy="137" r="10" fill="none" stroke-width="1.4" opacity="0.85"/>
+        <!-- Pupil — small circle inside iris -->
+        <circle cx="112" cy="137" r="4.5" fill="none" stroke-width="2" opacity="0.75"/>
+        <!-- Shine — filled white dot, upper-left of iris -->
+        <circle cx="107" cy="132" r="3.5" fill="#faf7f1" stroke="none"/>
+        <!-- Small second sparkle -->
+        <circle cx="116" cy="143" r="1.5" fill="#faf7f1" stroke="none" opacity="0.6"/>
+        <!-- Inner corner -->
+        <path d="M88 140 Q86 137 88 134" fill="none" stroke-width="1" opacity="0.5"/>
+        <!-- Three small lashes -->
+        <line x1="100" y1="120" x2="97" y2="114" stroke-width="1.2" opacity="0.65"/>
+        <line x1="112" y1="116" x2="112" y2="110" stroke-width="1.2" opacity="0.65"/>
+        <line x1="124" y1="120" x2="127" y2="114" stroke-width="1.2" opacity="0.65"/>
+
+        <!-- RIGHT EYE -->
+        <path d="M164 140 Q164 124 176 122 Q200 118 212 140 Q212 152 188 154 Q164 156 164 140Z"
+              fill="none" stroke-width="1.8"/>
+        <path d="M164 140 Q164 124 176 122 Q200 118 212 140"
+              stroke-width="2.6"/>
+        <circle cx="188" cy="137" r="10" fill="none" stroke-width="1.4" opacity="0.85"/>
+        <circle cx="188" cy="137" r="4.5" fill="none" stroke-width="2" opacity="0.75"/>
+        <circle cx="183" cy="132" r="3.5" fill="#faf7f1" stroke="none"/>
+        <circle cx="192" cy="143" r="1.5" fill="#faf7f1" stroke="none" opacity="0.6"/>
+        <path d="M212 140 Q214 137 212 134" fill="none" stroke-width="1" opacity="0.5"/>
+        <line x1="176" y1="120" x2="173" y2="114" stroke-width="1.2" opacity="0.65"/>
+        <line x1="188" y1="116" x2="188" y2="110" stroke-width="1.2" opacity="0.65"/>
+        <line x1="200" y1="120" x2="203" y2="114" stroke-width="1.2" opacity="0.65"/>
+
+        <!-- STOP: graceful indent arc -->
+        <path d="M126 162 Q138 152 150 152 Q162 152 174 162"
+              stroke-width="1.4" opacity="0.55"/>
+
+        <!-- Cheek pad curves -->
+        <path d="M56 166 Q48 182 52 200 Q58 212 72 218"
+              stroke-width="1.2" opacity="0.35"/>
+        <path d="M244 166 Q252 182 248 200 Q242 212 228 218"
+              stroke-width="1.2" opacity="0.35"/>
+
+        <!-- MUZZLE: wide, short, padded — the clean staffy square -->
+        <path d="
+          M92 174
+          Q86 194 92 212
+          Q108 230 150 232
+          Q192 230 208 212
+          Q214 194 208 174
+          Q188 162 150 160
+          Q112 162 92 174Z
+        " stroke-width="2"/>
+
+        <!-- Muzzle top shelf — single delicate crease -->
+        <path d="M94 174 Q122 164 150 162 Q178 164 206 174"
+              stroke-width="1" opacity="0.38"/>
+
+        <!-- NOSE: elegant filled shape — the one solid element, anchors the face -->
+        <path d="M122 182 Q134 168 150 167 Q166 168 178 182 Q180 198 150 202 Q120 198 122 182Z"
+              fill="#c4975a" stroke="none"/>
+        <!-- Nose bridge highlight -->
+        <path d="M124 184 Q138 172 150 173"
+              stroke="#faf7f1" stroke-width="2" opacity="0.5" fill="none"/>
+        <!-- Nostril arcs -->
+        <path d="M124 189 Q132 182 140 186" stroke="#f5f0e8" stroke-width="1.3" opacity="0.45" fill="none"/>
+        <path d="M160 186 Q168 182 176 189" stroke="#f5f0e8" stroke-width="1.3" opacity="0.45" fill="none"/>
+
+        <!-- Philtrum -->
+        <line x1="150" y1="202" x2="150" y2="214" stroke-width="1.6" opacity="0.75"/>
+
+        <!-- OPEN GRIN + TONGUE -->
+        <!-- Upper lip wave -->
+        <path d="M102 214 Q126 224 150 222 Q174 224 198 214" stroke-width="2"/>
+        <!-- Lip corners -->
+        <path d="M98 212 Q92 220 98 228" stroke-width="1.6"/>
+        <path d="M202 212 Q208 220 202 228" stroke-width="1.6"/>
+        <!-- Lower jaw -->
+        <path d="M98 228 Q120 246 150 248 Q180 246 202 228" stroke-width="2"/>
+        <!-- Tongue — wide, confident arc -->
+        <path d="M114 222 Q150 258 186 222" stroke-width="2.6"/>
+        <!-- Tongue groove -->
+        <line x1="150" y1="222" x2="150" y2="250" stroke-width="1.4" opacity="0.38"/>
+        <!-- Tongue tip notch -->
+        <path d="M141 248 Q150 258 159 248" stroke-width="1.8" opacity="0.5"/>
+
+      </g>
+    </svg>
+
+    <div class="hero-title-jp">御招待</div>
+    <div class="hero-title-en">You Are Cordially Invited</div>
+
+    <div class="hero-rule">
+      <span class="r-line"></span>
+      <span class="r-mark"></span>
+      <span class="r-line"></span>
+    </div>
+
+    <div class="hero-details">
+      <div class="hero-date">An Evening of Omakase</div>
+      <div class="hero-host" style="margin-top:0.8rem">12 April · 6:00 PM</div>
+      <div class="hero-host" style="margin-top:0.4rem">at our home · in your honour</div>
+      <div class="hero-host" style="margin-top:0.8rem; color: var(--gold); opacity: 0.8; letter-spacing: 0.4em;">Chef Henry</div>
+    </div>
+  </div>
+
+  <div class="scroll-invite">
+    <span>御覧ください</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── Invitation Text ── -->
+<section class="invitation">
+  <div class="inv-kanji-bg">友</div>
+  <div class="inv-inner">
+    <div class="inv-jp-label reveal">おもてなし · Omotenashi</div>
+    <h2 class="inv-title reveal">
+      Join us for an intimate<br>evening of fine Cuisine.
+    </h2>
+    <p class="inv-body reveal">
+      A nine-course omakase journey<br>
+      from the sea to the season —<br>
+      each dish offered with intention,<br>
+      each moment held with gratitude.
+    </p>
+    <div class="inv-address reveal">
+      <div class="inv-address-label">御住所 · 日時</div>
+      <div class="inv-address-text">1 Dora Street, Hurstville</div>
+      <div class="inv-address-text" style="margin-top:0.4rem; font-size: clamp(0.9rem, 2vw, 1.1rem); opacity: 0.8;">Saturday, 12 April · 6:00 PM</div>
+    </div>
+    <div class="reveal">
+      <button class="rsvp-btn" onclick="acceptInvite()">I Would Be Delighted to Attend</button>
+      <div class="rsvp-response" id="rsvpResponse">
+        Wonderful — we look forward to welcoming you.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Menu ── -->
+<section class="menu-section">
+
+  <div class="menu-topper reveal">
+    <div class="menu-topper-jp">献立</div>
+    <div class="menu-topper-rule"></div>
+    <div class="menu-topper-en">The Menu ·献立表</div>
+  </div>
+
+  <div class="menu-card reveal">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <div class="menu-header">
+      <div class="menu-header-jp">おまかせ</div>
+      <div class="menu-header-divider">
+        <span class="mhd-line"></span>
+        <span class="mhd-diamond"></span>
+        <span class="mhd-line"></span>
+      </div>
+      <div class="menu-header-en">Omakase · Nine Courses</div>
+      <div style="margin-top: 0.8rem; font-family: 'Noto Serif JP', serif; font-weight: 200; font-size: 0.7rem; letter-spacing: 0.6em; color: var(--gold);">料理長 · Chef Henry</div>
+    </div>
+
+    <!-- Course 1 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">一 · First Course</div>
+        <div class="course-jp">生牡蠣</div>
+        <div class="course-en">Sydney Rock Oysters, Two Ways</div>
+        <div class="course-desc">Four oysters — two pristine with yuzu kosho, two dressed with diced cucumber, rice vinegar, and ikura.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 2 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">二 · Second Course</div>
+        <div class="course-jp">平政クルード</div>
+        <div class="course-en">Hiramasa Kingfish Crudo</div>
+        <div class="course-desc">Thinly sliced kingfish with blood orange, green herb oil, flaky Okinawan sea salt, and pink peppercorns.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 3 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">三 · Third Course</div>
+        <div class="course-jp">鮭タルタル</div>
+        <div class="course-en">Salmon Tartare, Nori Crisps</div>
+        <div class="course-desc">Hand-chopped Tasmanian salmon with soy, sesame, and ginger. Served with house-toasted nori wafers.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 4 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">四 · Fourth Course</div>
+        <div class="course-jp">鯛刺身</div>
+        <div class="course-en">Snapper Sashimi, Ponzu &amp; Daikon</div>
+        <div class="course-desc">Delicate slices of snapper over finely grated daikon, finished with spring onion and ponzu dipping sauce.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 5 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">五 · Fifth Course</div>
+        <div class="course-jp">特別お造り盛り合わせ</div>
+        <div class="course-en">Chef's Sashimi Selection</div>
+        <div class="course-desc">Salmon, kingfish, and ocean trout arranged on a chilled stone plate with edible blossoms, shiso, and truffle oil.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 6 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">六 · Sixth Course</div>
+        <div class="course-jp">白味噌仕立て</div>
+        <div class="course-en">Shiro Miso Soup, Silken Tofu</div>
+        <div class="course-desc">White miso broth drawn from kombu and bonito, with trembling silken tofu, wakame, and fine spring onion.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 7 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">七 · Seventh Course</div>
+        <div class="course-jp">口直し</div>
+        <div class="course-en">Cucumber &amp; Shiso Granita</div>
+        <div class="course-desc">Barely-sweetened cucumber and shiso, frozen and scraped into pale green ice — a still, cold pause between worlds.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 8 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">八 · Eighth Course</div>
+        <div class="course-jp">握り盛り合わせ</div>
+        <div class="course-en">Nigiri Selection · Six Pieces</div>
+        <div class="course-desc">Hand-pressed shari topped with salmon, kingfish, snapper, ocean trout, scallop, and prawn — each brushed lightly with soy.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Course 9 -->
+    <div class="course">
+      <div class="course-inner">
+        <div class="course-num">九 · Ninth Course</div>
+        <div class="course-jp">黒胡麻アフォガート</div>
+        <div class="course-en">Black Sesame Affogato</div>
+        <div class="course-desc">A quenelle of black sesame ice cream, drowned in hot hojicha. Crowned with a salted cherry blossom.</div>
+        <div class="course-mark"></div>
+      </div>
+    </div>
+
+    <!-- Drinks -->
+    <div class="drinks-section">
+      <div class="drinks-header">
+        <div class="drinks-header-jp">飲物</div>
+        <div class="drinks-header-en">To Accompany</div>
+      </div>
+      <div class="drink-item">
+        <div>
+          <div class="drink-name">Cold Hojicha &amp; Sparkling Water</div>
+          <div class="drink-jp">冷ほうじ茶</div>
+        </div>
+        <div class="drink-note">with raw courses</div>
+      </div>
+      <div class="drink-item">
+        <div>
+          <div class="drink-name">Ginger Lemongrass Tonic</div>
+          <div class="drink-jp">生姜トニック</div>
+        </div>
+        <div class="drink-note">with warm courses</div>
+      </div>
+      <div class="drink-item">
+        <div>
+          <div class="drink-name">Warm Mugicha</div>
+          <div class="drink-jp">麦茶</div>
+        </div>
+        <div class="drink-note">with dessert</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="footer-inner reveal">
+    <!-- Staffy Head footer -->
+    <svg class="footer-mon" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="150" cy="130" r="128" stroke="#c4975a" stroke-width="1.2" opacity="0.3"/>
+      <circle cx="150" cy="130" r="121" stroke="#c4975a" stroke-width="0.4" opacity="0.12"/>
+      <g stroke="#c4975a" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.62">
+        <path d="M96 74 Q100 48 150 44 Q200 48 204 74 Q226 82 240 108 Q252 136 244 164 Q232 196 206 212 Q182 226 150 228 Q118 226 94 212 Q68 196 56 164 Q48 136 60 108 Q74 82 96 74Z" stroke-width="2.2"/>
+        <path d="M106 60 Q128 46 150 44 Q172 46 194 60" stroke-width="0.9" opacity="0.3"/>
+        <path d="M96 74 Q78 50 60 62 Q46 76 54 98 Q62 114 80 108 Q94 100 96 82" stroke-width="1.8"/>
+        <path d="M56 68 Q66 86 78 102" stroke-width="0.9" opacity="0.4"/>
+        <path d="M204 74 Q222 50 240 62 Q254 76 246 98 Q238 114 220 108 Q206 100 204 82" stroke-width="1.8"/>
+        <path d="M244 68 Q234 86 222 102" stroke-width="0.9" opacity="0.4"/>
+        <path d="M64 112 Q98 92 128 106" stroke-width="2.6"/>
+        <path d="M172 106 Q202 92 236 112" stroke-width="2.6"/>
+        <path d="M128 102 Q140 88 150 90 Q160 88 172 102" stroke-width="1.6" opacity="0.8"/>
+        <path d="M70 106 Q100 88 126 100" stroke-width="0.9" opacity="0.28"/>
+        <path d="M174 100 Q200 88 230 106" stroke-width="0.9" opacity="0.28"/>
+        <path d="M88 140 Q100 118 124 122 Q136 124 136 140 Q124 156 100 154 Q88 152 88 140Z" fill="none" stroke-width="1.8"/>
+        <path d="M88 140 Q100 118 124 122 Q136 124 136 140" stroke-width="2.6"/>
+        <circle cx="112" cy="137" r="10" fill="none" stroke-width="1.4" opacity="0.85"/>
+        <circle cx="112" cy="137" r="4.5" fill="none" stroke-width="2" opacity="0.75"/>
+        <circle cx="107" cy="132" r="3.5" fill="#faf7f1" stroke="none"/>
+        <circle cx="116" cy="143" r="1.5" fill="#faf7f1" stroke="none" opacity="0.6"/>
+        <line x1="100" y1="120" x2="97" y2="114" stroke-width="1.2" opacity="0.65"/>
+        <line x1="112" y1="116" x2="112" y2="110" stroke-width="1.2" opacity="0.65"/>
+        <line x1="124" y1="120" x2="127" y2="114" stroke-width="1.2" opacity="0.65"/>
+        <path d="M164 140 Q164 124 176 122 Q200 118 212 140 Q212 152 188 154 Q164 156 164 140Z" fill="none" stroke-width="1.8"/>
+        <path d="M164 140 Q164 124 176 122 Q200 118 212 140" stroke-width="2.6"/>
+        <circle cx="188" cy="137" r="10" fill="none" stroke-width="1.4" opacity="0.85"/>
+        <circle cx="188" cy="137" r="4.5" fill="none" stroke-width="2" opacity="0.75"/>
+        <circle cx="183" cy="132" r="3.5" fill="#faf7f1" stroke="none"/>
+        <circle cx="192" cy="143" r="1.5" fill="#faf7f1" stroke="none" opacity="0.6"/>
+        <line x1="176" y1="120" x2="173" y2="114" stroke-width="1.2" opacity="0.65"/>
+        <line x1="188" y1="116" x2="188" y2="110" stroke-width="1.2" opacity="0.65"/>
+        <line x1="200" y1="120" x2="203" y2="114" stroke-width="1.2" opacity="0.65"/>
+        <path d="M126 162 Q138 152 150 152 Q162 152 174 162" stroke-width="1.4" opacity="0.55"/>
+        <path d="M56 166 Q48 182 52 200 Q58 212 72 218" stroke-width="1.2" opacity="0.35"/>
+        <path d="M244 166 Q252 182 248 200 Q242 212 228 218" stroke-width="1.2" opacity="0.35"/>
+        <path d="M92 174 Q86 194 92 212 Q108 230 150 232 Q192 230 208 212 Q214 194 208 174 Q188 162 150 160 Q112 162 92 174Z" stroke-width="2"/>
+        <path d="M94 174 Q122 164 150 162 Q178 164 206 174" stroke-width="1" opacity="0.38"/>
+        <path d="M122 182 Q134 168 150 167 Q166 168 178 182 Q180 198 150 202 Q120 198 122 182Z" fill="#c4975a" stroke="none"/>
+        <path d="M124 184 Q138 172 150 173" stroke="#faf7f1" stroke-width="2" opacity="0.5" fill="none"/>
+        <line x1="150" y1="202" x2="150" y2="214" stroke-width="1.6" opacity="0.75"/>
+        <path d="M102 214 Q126 224 150 222 Q174 224 198 214" stroke-width="2"/>
+        <path d="M98 212 Q92 220 98 228" stroke-width="1.6"/>
+        <path d="M202 212 Q208 220 202 228" stroke-width="1.6"/>
+        <path d="M98 228 Q120 246 150 248 Q180 246 202 228" stroke-width="2"/>
+        <path d="M114 222 Q150 258 186 222" stroke-width="2.6"/>
+        <line x1="150" y1="222" x2="150" y2="250" stroke-width="1.4" opacity="0.38"/>
+        <path d="M141 248 Q150 258 159 248" stroke-width="1.8" opacity="0.5"/>
+      </g>
+    </svg>
+
+    <div class="footer-jp">御礼</div>
+    <div class="footer-en">With gratitude for your presence</div>
+    <div class="footer-line"></div>
+    <div class="footer-note">おいでいただき、誠にありがとうございます</div>
+  </div>
+</footer>
+
+<script>
+// ── Falling gingko leaves ──
+const leafColors = ['#c4975a','#dbb87a','#8b1a1a','#2d4a3e'];
+function createLeaf() {
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf';
+  const color = leafColors[Math.floor(Math.random() * leafColors.length)];
+  leaf.style.background = color;
+  leaf.style.left = Math.random() * 100 + 'vw';
+  leaf.style.top = '-20px';
+  const drift = (Math.random() - 0.5) * 180;
+  const spin = Math.random() * 540 - 270;
+  const dur = 8 + Math.random() * 8;
+  leaf.style.setProperty('--leaf-drift', drift + 'px');
+  leaf.style.setProperty('--leaf-spin', spin + 'deg');
+  leaf.style.animationDuration = dur + 's';
+  document.body.appendChild(leaf);
+  setTimeout(() => leaf.remove(), dur * 1000);
+}
+setInterval(createLeaf, 1200);
+for (let i = 0; i < 4; i++) setTimeout(createLeaf, i * 300);
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .course, .drinks-section').forEach(el => observer.observe(el));
+
+// ── RSVP button ──
+function acceptInvite() {
+  const btn = document.querySelector('.rsvp-btn');
+  const res = document.getElementById('rsvpResponse');
+  btn.style.opacity = '0';
+  btn.style.transition = 'opacity 0.5s';
+  setTimeout(() => {
+    btn.style.display = 'none';
+    res.style.display = 'block';
+  }, 500);
+
+  const symbols = ['鶴','花','水','月','雪','松','竹','梅'];
+  for (let i = 0; i < 24; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      p.style.left = (30 + Math.random() * 40) + 'vw';
+      p.style.top = (30 + Math.random() * 20) + 'vh';
+      p.style.color = '#c4975a';
+      p.style.fontSize = (0.7 + Math.random() * 0.8) + 'rem';
+      p.style.fontFamily = "'Noto Serif JP', serif";
+      p.style.fontWeight = '200';
+      p.style.setProperty('--p-spin', (Math.random() * 360 - 180) + 'deg');
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2500);
+    }, i * 80);
+  }
+}
+</script>
+</body>
+</html>
